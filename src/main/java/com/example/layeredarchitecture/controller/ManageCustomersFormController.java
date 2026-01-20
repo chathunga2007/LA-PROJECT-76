@@ -175,6 +175,7 @@ public class ManageCustomersFormController {
             selectedCustomer.setAddress(address);
             tblCustomers.refresh();
         }
+        a
 
         btnAddNewCustomer.fire();
     }
