@@ -2,6 +2,7 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -66,14 +67,17 @@ public class ManageCustomersFormController {
         /*Get all customers*/
         try {
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-            customerDAO.getAllCustomers();
+            ArrayList<CustomerDTO> customerDTO=customerDAO.getAllCustomers();
 
-            ArrayList<>
-
-            for () {
-
+            for (CustomerDTO customer : customerDTO) {
+                tblCustomers.getItems().add(
+                        new CustomerTM(
+                                customer.getId(),
+                                customer.getName(),
+                                customer.getAddress()
+                        )
+                );
             }
-
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         } catch (ClassNotFoundException e) {
