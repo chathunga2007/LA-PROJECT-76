@@ -122,7 +122,6 @@ public class ManageCustomersFormController {
         tblCustomers.getSelectionModel().clearSelection();
     }
 
-
     public void btnSave_OnAction(ActionEvent actionEvent) {
         String id = txtCustomerId.getText();
         String name = txtCustomerName.getText();
@@ -179,16 +178,13 @@ public class ManageCustomersFormController {
         btnAddNewCustomer.fire();
     }
 
-
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 
         CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-        customerDAO.existCustomer(id);
-
-        return false;
+        boolean cus = customerDAO.existCustomer(id);
+        return cus;
 
     }
-
 
     public void btnDelete_OnAction(ActionEvent actionEvent) {
         /*Delete Customer*/
@@ -197,10 +193,9 @@ public class ManageCustomersFormController {
             if (!existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
-            Connection connection = DBConnection.getDbConnection().getConnection();
-            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
-            pstm.setString(1, id);
-            pstm.executeUpdate();
+
+            CustomerDAOImpl  customerDAO = new CustomerDAOImpl();
+            customerDAO.deleteCustomer(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();
