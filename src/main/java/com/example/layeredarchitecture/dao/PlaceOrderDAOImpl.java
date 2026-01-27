@@ -5,7 +5,6 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
 import com.jfoenix.controls.JFXComboBox;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
