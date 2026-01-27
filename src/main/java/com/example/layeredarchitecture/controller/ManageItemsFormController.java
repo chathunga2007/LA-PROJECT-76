@@ -177,7 +177,7 @@ public class ManageItemsFormController {
                 }
                 //Save Item
                 ItemDAOImpl itemDAO = new ItemDAOImpl();
-                itemDAO.saveCustomer(code,  description, unitPrice, qtyOnHand);
+                itemDAO.saveItem(code,  description, unitPrice, qtyOnHand);
 
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
 
@@ -194,7 +194,7 @@ public class ManageItemsFormController {
                 }
                 /*Update Item*/
                 ItemDAOImpl  itemDAO = new ItemDAOImpl();
-                itemDAO.updateCustomer(code,  description, unitPrice, qtyOnHand);
+                itemDAO.updateItem(code,  description, unitPrice, qtyOnHand);
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);

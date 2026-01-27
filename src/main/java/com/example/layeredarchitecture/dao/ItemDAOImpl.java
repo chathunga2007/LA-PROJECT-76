@@ -23,7 +23,7 @@ public class ItemDAOImpl {
         return items;
     }
 
-    public void saveCustomer(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public void saveItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)");
         pstm.setString(1, code);
@@ -33,14 +33,14 @@ public class ItemDAOImpl {
         pstm.executeUpdate();
     }
 
-    public void updateCustomer(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public boolean updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
         pstm.setString(1, description);
         pstm.setBigDecimal(2, unitPrice);
         pstm.setInt(3, qtyOnHand);
         pstm.setString(4, code);
-        pstm.executeUpdate();
+        return pstm.executeUpdate() > 0;
     }
 
     public void deleteItem(String code) throws SQLException, ClassNotFoundException {
@@ -69,4 +69,12 @@ public class ItemDAOImpl {
         }
     }
 
+    public ItemDTO findItem(String code) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
+        pstm.setString(1, code);
+        ResultSet rst = pstm.executeQuery();
+        rst.next();
+        return new ItemDTO(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+    }
 }
