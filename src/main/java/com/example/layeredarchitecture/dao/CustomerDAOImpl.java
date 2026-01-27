@@ -2,7 +2,6 @@ package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -68,14 +67,4 @@ public class CustomerDAOImpl {
             return "C00-001";
         }
     }
-    public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
-        pstm.setString(1, id);
-        ResultSet rst = pstm.executeQuery();
-        rst.next();
-        return new CustomerDTO(rst.getString("id"), rst.getString("name"), rst.getString("address"));
-    }
-
-
 }
