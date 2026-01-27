@@ -144,7 +144,7 @@ public class ManageCustomersFormController {
                 }
 
                 CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                customerDAO.saveCustomer(id,name,address);
+                customerDAO.saveCustomers(id,name,address);
 
                 tblCustomers.getItems().add(new CustomerTM(id, name, address));
             } catch (SQLException e) {
@@ -161,7 +161,7 @@ public class ManageCustomersFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
                 }
                 CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-                customerDAO.updateCustomer(id,name,address);
+                customerDAO.updateCustomers(id,name,address);
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, "Failed to update the customer " + id + e.getMessage()).show();
             } catch (ClassNotFoundException e) {
@@ -180,7 +180,7 @@ public class ManageCustomersFormController {
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 
         CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-        boolean cus = customerDAO.existCustomer(id);
+        boolean cus = customerDAO.exitCustomers(id);
         return cus;
 
     }
@@ -194,7 +194,7 @@ public class ManageCustomersFormController {
             }
 
             CustomerDAOImpl  customerDAO = new CustomerDAOImpl();
-            customerDAO.deleteCustomer(id);
+            customerDAO.deleteCustomers(id);
 
             tblCustomers.getItems().remove(tblCustomers.getSelectionModel().getSelectedItem());
             tblCustomers.getSelectionModel().clearSelection();
