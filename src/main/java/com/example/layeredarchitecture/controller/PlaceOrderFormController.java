@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.ItemDAOImpl;
 import com.example.layeredarchitecture.dao.OrderDetailsDAOImpl;
 import com.example.layeredarchitecture.dao.OrderDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -25,6 +27,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -180,9 +183,8 @@ public class PlaceOrderFormController {
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-
-        OrderDAOImpl placeOrderDAO = new OrderDAOImpl();
-        return placeOrderDAO.existItems(code);
+        ItemDAOImpl itemDAO = new ItemDAOImpl();
+        return itemDAO.existItem(code);
 
 //        Connection connection = DBConnection.getDbConnection().getConnection();
 //        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
@@ -196,8 +198,8 @@ public class PlaceOrderFormController {
 //        pstm.setString(1, id);
 //        return pstm.executeQuery().next();
 
-        OrderDAOImpl placeOrderDAO = new OrderDAOImpl();
-        return placeOrderDAO.existCustomers(id);
+        CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+        return customerDAO.existCustomer(id);
     }
 
     public String generateNewOrderId() {
@@ -222,9 +224,11 @@ public class PlaceOrderFormController {
     private void loadAllCustomerIds() {
         try {
             /*Get all customer*/
-
-            OrderDAOImpl placeOrderDAO = new OrderDAOImpl();
-            placeOrderDAO.loadCustomerId(cmbCustomerId);
+            CustomerDAOImpl customerDAO = new CustomerDAOImpl();
+            ArrayList<CustomerDTO> customerDTOs = customerDAO.getAllCustomers();
+            for (CustomerDTO customerDTO : customerDTOs) {
+                cmbCustomerId.getItems().add(customerDTO.getId());
+            }
 
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
@@ -235,11 +239,12 @@ public class PlaceOrderFormController {
 
     private void loadAllItemCodes() {
         try {
-
             /*Get all items*/
-
-            OrderDAOImpl placeOrderDAO = new OrderDAOImpl();
-            placeOrderDAO.loadItemId(cmbItemCode);
+            ItemDAOImpl itemDAO = new ItemDAOImpl();
+            ArrayList<ItemDTO> itemDTOs = itemDAO.getAllItems();
+            for (ItemDTO itemDTO : itemDTOs) {
+                cmbItemCode.getItems().add(itemDTO.getCode());
+            }
 
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
