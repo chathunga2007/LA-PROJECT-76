@@ -1,7 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
-import com.example.layeredarchitecture.dao.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
@@ -24,8 +24,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-
 
 public class ManageCustomersFormController {
     public AnchorPane root;

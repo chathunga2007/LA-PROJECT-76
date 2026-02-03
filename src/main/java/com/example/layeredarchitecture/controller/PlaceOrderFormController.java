@@ -1,10 +1,13 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.*;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailsDAO;
+import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.OrderDetailsDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
@@ -56,7 +59,7 @@ public class PlaceOrderFormController {
     CustomerDAO customerDAO = new CustomerDAOImpl();
     ItemDAO itemDAO = new ItemDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
-    OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAOImpl();
+    OrderDetailsDAO orderDetailDAO = new OrderDetailsDAOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -107,6 +110,7 @@ public class PlaceOrderFormController {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
+
                         CustomerDTO customerDTO=customerDAO.searchCustomer(newValue + "");
                         txtCustomerName.setText(customerDTO.getName());
                     } catch (SQLException e) {
@@ -338,7 +342,7 @@ public class PlaceOrderFormController {
 
             for (OrderDetailDTO detail : orderDetails) {
 
-                boolean b3 = orderDetailsDAO.saveOrderDetails(detail);
+                boolean b3 = orderDetailDAO.saveOrderDetails(detail);
 
                 if (!b3) {
                     connection.rollback();
