@@ -107,6 +107,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
         connection.setAutoCommit(true);
         return true;
     }
+
+    @Override
     public ItemDTO findItem(String code) {
         try {
             return itemDAO.search(code);

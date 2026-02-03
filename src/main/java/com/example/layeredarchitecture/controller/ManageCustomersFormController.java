@@ -38,7 +38,6 @@ public class ManageCustomersFormController {
     public JFXButton btnAddNewCustomer;
 
     //dependency injection (property)
-    CustomerDAO customerDAO = new CustomerDAOImpl();
     CustomerBO  customerBO = new CustomerBOImpl();
 
     public void initialize() {
