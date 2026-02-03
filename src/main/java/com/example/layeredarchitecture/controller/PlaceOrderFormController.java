@@ -1,5 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.custom.CustomerBO;
+import com.example.layeredarchitecture.bo.custom.ItemBO;
+import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
+import com.example.layeredarchitecture.bo.custom.impl.CustomerBOImpl;
+import com.example.layeredarchitecture.bo.custom.impl.ItemBOImpl;
+import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
@@ -60,6 +66,9 @@ public class PlaceOrderFormController {
     ItemDAO itemDAO = new ItemDAOImpl();
     OrderDAO orderDAO = new OrderDAOImpl();
     OrderDetailsDAO orderDetailDAO = new OrderDetailsDAOImpl();
+    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+    ItemBO itemBO = new ItemBOImpl();
+    CustomerBO customerBO = new CustomerBOImpl();
 
     public void initialize() throws SQLException, ClassNotFoundException {
 
@@ -111,7 +120,7 @@ public class PlaceOrderFormController {
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
 
-                        CustomerDTO customerDTO=customerDAO.searchCustomer(newValue + "");
+                        CustomerDTO customerDTO=customerBO.searchCustomers(newValue + "");
                         txtCustomerName.setText(customerDTO.getName());
                     } catch (SQLException e) {
                         new Alert(Alert.AlertType.ERROR, "Failed to find the customer " + newValue + "" + e).show();
@@ -138,7 +147,7 @@ public class PlaceOrderFormController {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
 
-                    ItemDTO item=itemDAO.searchItem(newItemCode + "");
+                    ItemDTO item=itemBO.searchItems(newItemCode + "");
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
 
@@ -183,18 +192,18 @@ public class PlaceOrderFormController {
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
 
-        return itemDAO.existItem(code);
+        return itemBO.existItems(code);
     }
 
     boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
 
-        return customerDAO.exitCustomers(id);
+        return customerBO.existCustomers(id);
     }
 
     public String generateNewOrderId() {
         try {
 
-            String id = orderDAO.generateNewOrderId();
+            String id = placeOrderBO.generateNewOrderID();
             return id;
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
@@ -207,7 +216,7 @@ public class PlaceOrderFormController {
     private void loadAllCustomerIds() {
         try {
 
-            ArrayList<CustomerDTO> customers=customerDAO.getAllCustomers();
+            ArrayList<CustomerDTO> customers=customerBO.getAllCustomers();
 
             for (CustomerDTO customer : customers) {
                 cmbCustomerId.getItems().add(customer.getId());
@@ -225,7 +234,7 @@ public class PlaceOrderFormController {
             /*Get all items*/
 
 
-            ArrayList<ItemDTO> items=itemDAO.getAllItems();
+            ArrayList<ItemDTO> items=itemBO.getAllItems();
             for ( ItemDTO item:items ) {
                 cmbItemCode.getItems().add(item.getCode());
             }
@@ -327,13 +336,13 @@ public class PlaceOrderFormController {
         try {
             connection = DBConnection.getDbConnection().getConnection();
 
-            boolean b1 = orderDAO.existsOrder(orderId);
+            boolean b1 = placeOrderBO.existOrder(orderId);
             /*if order id already exist*/
             if (b1) {
                 return false;
             }
             connection.setAutoCommit(false);
-            boolean b2 = orderDAO.saveOrder(new OrderDTO(orderId,orderDate,customerId));
+            boolean b2 = placeOrderBO.saveOrder(new OrderDTO(orderId,orderDate,customerId));
             if (!b2) {
                 connection.rollback();
                 connection.setAutoCommit(true);
@@ -342,7 +351,7 @@ public class PlaceOrderFormController {
 
             for (OrderDetailDTO detail : orderDetails) {
 
-                boolean b3 = orderDetailDAO.saveOrderDetails(detail);
+                boolean b3 = placeOrderBO.saveOrderDetails(detail);
 
                 if (!b3) {
                     connection.rollback();
@@ -354,7 +363,7 @@ public class PlaceOrderFormController {
                 item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
 
-                boolean b4 = itemDAO.updateItem(new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(), item.getQtyOnHand()));
+                boolean b4 = itemBO.updateItems(new ItemDTO(item.getCode(),item.getDescription(),item.getUnitPrice(), item.getQtyOnHand()));
 
                 if (!b4) {
                     connection.rollback();
@@ -378,7 +387,7 @@ public class PlaceOrderFormController {
     public ItemDTO findItem(String code) {
         try {
 
-            return itemDAO.searchItem(code);
+            return itemBO.searchItems(code);
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find the Item " + code, e);
         } catch (ClassNotFoundException e) {
