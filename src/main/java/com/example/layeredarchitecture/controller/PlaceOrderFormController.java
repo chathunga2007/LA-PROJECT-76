@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.bo.custom.BOFactory;
+import com.example.layeredarchitecture.bo.custom.CustomerBO;
 import com.example.layeredarchitecture.bo.custom.PlaceOrderBO;
 import com.example.layeredarchitecture.bo.custom.impl.PlaceOrderBOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -48,7 +50,7 @@ public class PlaceOrderFormController {
     public Label lblTotal;
     private String orderId;
 
-    PlaceOrderBO placeOrderBO = new PlaceOrderBOImpl();
+    PlaceOrderBO placeOrderBO = (PlaceOrderBO) BOFactory.getInstance().getBO(BOFactory.BOType.PLACE_ORDER);
 
     public void initialize() {
 
