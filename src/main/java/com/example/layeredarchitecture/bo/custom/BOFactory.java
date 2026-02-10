@@ -18,7 +18,7 @@ public class BOFactory {
         CUSTOMER, ITEM, PLACE_ORDER
     }
 
-    public Object getBO(BOFactory.BOType daoType) {
+    public SuperBO getBO(BOFactory.BOType daoType) {
         switch (daoType) {
             case CUSTOMER:
                 return new CustomerBOImpl();

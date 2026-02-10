@@ -4,7 +4,7 @@ import com.example.layeredarchitecture.model.CustomerDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface CustomerBO {
+public interface CustomerBO extends SuperBO{
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException;
     public boolean saveCustomers(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException;
     public boolean updateCustomers(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException;
