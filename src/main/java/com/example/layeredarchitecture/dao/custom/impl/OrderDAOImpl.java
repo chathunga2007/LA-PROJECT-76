@@ -3,6 +3,8 @@ package com.example.layeredarchitecture.dao.custom.impl;
 import com.example.layeredarchitecture.dao.CrudUtil;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dto.OrderDTO;
+import com.example.layeredarchitecture.entity.Order;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -14,30 +16,33 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
+    public Order search(String id) throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
     public boolean exist(String orderId) throws SQLException, ClassNotFoundException {
-        ResultSet rst = CrudUtil.execute("SELECT oid FROM `Orders` WHERE oid=?",  orderId);
+        ResultSet rst= CrudUtil.execute("SELECT oid FROM `Orders` WHERE oid=?", orderId);
         return rst.next();
     }
 
     @Override
-    public boolean save(OrderDTO orderDTO) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)", orderDTO.getOrderId(), orderDTO.getOrderDate(), orderDTO.getCustomerId());
-    }
-
-    @Override
-    public boolean update(OrderDTO dto) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-    @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
         return false;
     }
+
     @Override
-    public ArrayList<OrderDTO> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
+
     @Override
-    public OrderDTO search(String id) throws SQLException, ClassNotFoundException {
-        return null;
+    public boolean save(Order entity) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)",entity.getOrderId(),entity.getOrderDate(),entity.getCustomerId());
+    }
+
+    @Override
+    public boolean update(Order entity) throws SQLException, ClassNotFoundException {
+        return false;
     }
 }
