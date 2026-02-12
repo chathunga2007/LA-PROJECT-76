@@ -17,6 +17,7 @@ import com.example.layeredarchitecture.dto.OrderDetailDTO;
 import com.example.layeredarchitecture.entity.Customer;
 import com.example.layeredarchitecture.entity.Item;
 import com.example.layeredarchitecture.entity.Order;
+import com.example.layeredarchitecture.entity.OrderDetails;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -94,7 +95,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
         }
         connection.setAutoCommit(false);
 //        boolean b2 = orderDAO.save(new OrderDTO(orderId,orderDate,customerId));
-        boolean b2 = orderDAO.save(new OrderDTO(orderId,orderDate,customerId));
+        boolean b2 = orderDAO.save(new Order(orderId,orderDate,customerId));
         if (!b2) {
             connection.rollback();
             connection.setAutoCommit(true);
@@ -103,7 +104,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
 
         for (OrderDetailDTO detail : orderDetails) {
 
-            boolean b3 = orderDetailDAO.save(detail);
+            boolean b3 = orderDetailDAO.save(new OrderDetails(detail.getOrderId(),detail.getItemCode(),detail.getQty(),detail.getUnitPrice()));
 
             if (!b3) {
                 connection.rollback();
